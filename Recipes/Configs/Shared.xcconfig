@@ -1,0 +1,10 @@
+//
+//  Shared.xcconfig
+//  Recipes
+//
+//  Created by Michal Kluszewski on 10/17/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+DATA_URL = https:/$()/d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json

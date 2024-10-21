@@ -30,11 +30,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4D40178F2CC1CF8300253B1D /* Recipes */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Recipes;
-			sourceTree = "<group>";
-		};
 		4D4017A02CC1CF8400253B1D /* RecipesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RecipesTests;
@@ -43,6 +38,11 @@
 		4D4017AA2CC1CF8400253B1D /* RecipesUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RecipesUITests;
+			sourceTree = "<group>";
+		};
+		4D4017CA2CC1EF1900253B1D /* Recipes */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Recipes;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +75,7 @@
 		4D4017842CC1CF8300253B1D = {
 			isa = PBXGroup;
 			children = (
-				4D40178F2CC1CF8300253B1D /* Recipes */,
+				4D4017CA2CC1EF1900253B1D /* Recipes */,
 				4D4017A02CC1CF8400253B1D /* RecipesTests */,
 				4D4017AA2CC1CF8400253B1D /* RecipesUITests */,
 				4D40178E2CC1CF8300253B1D /* Products */,
@@ -108,7 +108,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				4D40178F2CC1CF8300253B1D /* Recipes */,
+				4D4017CA2CC1EF1900253B1D /* Recipes */,
 			);
 			name = Recipes;
 			packageProductDependencies = (
@@ -271,6 +271,8 @@
 /* Begin XCBuildConfiguration section */
 		4D4017AF2CC1CF8400253B1D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 4D4017CA2CC1EF1900253B1D /* Recipes */;
+			baseConfigurationReferenceRelativePath = Configs/Shared.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -334,6 +336,8 @@
 		};
 		4D4017B02CC1CF8400253B1D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 4D4017CA2CC1EF1900253B1D /* Recipes */;
+			baseConfigurationReferenceRelativePath = Configs/Shared.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -390,6 +394,8 @@
 		};
 		4D4017B22CC1CF8400253B1D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 4D4017CA2CC1EF1900253B1D /* Recipes */;
+			baseConfigurationReferenceRelativePath = Configs/AppDebug.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -399,11 +405,13 @@
 				DEVELOPMENT_TEAM = 9PSX95N447;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Recipes;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -419,6 +427,8 @@
 		};
 		4D4017B32CC1CF8400253B1D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 4D4017CA2CC1EF1900253B1D /* Recipes */;
+			baseConfigurationReferenceRelativePath = Configs/AppRelease.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -428,11 +438,14 @@
 				DEVELOPMENT_TEAM = 9PSX95N447;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Recipes;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = "";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos*]" = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
