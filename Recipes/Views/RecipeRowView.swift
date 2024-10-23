@@ -6,13 +6,15 @@
 //
 import Foundation
 import SwiftUI
+import CachedAsyncImage
 
 struct RecipeRowView: View {
     let recipe: Recipe
+    let showDetails: (_ sourceURL: URL?, _ youtubeURL: URL?) -> Void
     
     var body: some View {
         HStack(alignment: .center) {
-            AsyncImage(url: recipe.photoUrlSmall) { image in
+            CachedAsyncImage(url: recipe.photoUrlSmall) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -20,6 +22,7 @@ struct RecipeRowView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             } placeholder: {
                 ProgressView()
+                    .frame(width: 50, height: 50)
             }
             
             VStack(alignment: .leading) {
@@ -34,25 +37,25 @@ struct RecipeRowView: View {
             
             if let youtubeUrl = recipe.youtubeUrl {
                 Button(action: {
-                    openYouTubeUrl(url: youtubeUrl)
+                    showDetails(nil, youtubeUrl)
                 }) {
                     Image(systemName: "play.circle.fill")
                         .font(.title)
                         .foregroundColor(.red)
                         .buttonStyle(PlainButtonStyle())
-                        .padding(.trailing, 8)
                 }
+                .buttonStyle(PlainButtonStyle())
             }
             
             if let sourceUrl = recipe.sourceUrl {
                 Button(action: {
-                    openYouTubeUrl(url: sourceUrl)
+                    showDetails(sourceUrl, nil)
                 }) {
                     Image(systemName: "safari.fill")
                         .font(.title)
                         .foregroundColor(.blue)
                         .buttonStyle(PlainButtonStyle())
-                        .padding(.trailing, 8)
+                        .padding(.leading, 8)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -80,6 +83,8 @@ struct RecipeRowView: View {
         photoUrlSmall: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/small.jpg")!,
         sourceUrl: URL(string: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ")!,
         youtubeUrl: URL(string: "https://www.youtube.com/watch?v=6R8ffRRJcrg")!
-    ))
+    )) { _, _ in
+        
+    }
 }
 

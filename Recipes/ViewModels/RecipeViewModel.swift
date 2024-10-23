@@ -7,23 +7,56 @@
 import Foundation
 import Combine
 
-class RecipeViewModel: ObservableObject {
+/// View-Model for Recipes
+///
+/// Uses ``RecipeService`` to load the data
+@MainActor class RecipeViewModel: ObservableObject {
+    /// whenever loading is in progress
     @Published var isLoading: Bool = false
+    /// list of the recipes if ready
     @Published var recipes: [Recipe] = []
+    /// error if we couldn't load the recipes
     @Published var errorMessage: String? = nil
     
-    private var recipeService = RecipeService()
+    /// recipes service instance
+    private let recipeService: RecipeService
     
-    func loadRecipes() {
-        self.isLoading = true
-        recipeService.fetchRecipes { result in
-            switch result {
-            case .success(let recipes):
-                self.recipes = recipes
-            case .failure(let error):
-                self.errorMessage = error.localizedDescription
-            }
-            self.isLoading = false
+    convenience init() {
+        self.init(recipeService: RecipeService.shared)
+    }
+    
+    /// Initializer for preview/test purposes
+    init(recipeService: RecipeService) {
+        self.recipeService = recipeService
+    }
+    
+    /// Requests recipes list from the service and update view-model fields
+    ///
+    /// - Parameters:
+    ///  - force: Force service to refresh data (reload)
+    private func requestRecipes(_ force: Bool) async {
+        isLoading = true
+        recipes = []
+        errorMessage = nil
+        do {
+            recipes = try await recipeService.fetchRecipes(force)
+        } catch {
+            errorMessage = error.localizedDescription
         }
+        isLoading = false
+    }
+    
+    /// Load recipes from service
+    ///
+    /// Updates local fields with data from service
+    func loadRecipes() async {
+        await requestRecipes(false)
+    }
+    
+    /// Reload recipes from services
+    ///
+    /// Ask service to reload the data and updates local fields
+    func reloadRecipes() async {
+        await requestRecipes(true)
     }
 }

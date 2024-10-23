@@ -7,65 +7,152 @@
 
 import Foundation
 
-enum RecipeServiceError: Error {
-    case requestError(Error)
-    case decodingError(Error)
-    case noData
-}
-
-extension RecipeServiceError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .requestError(_):
-            return NSLocalizedString(ErrorStrings.ErrorLoadingRecipes, comment: "")
-        case .decodingError(_):
-            return NSLocalizedString(ErrorStrings.ErrorLoadingRecipes, comment: "")
-        case .noData:
-            return NSLocalizedString(ErrorStrings.NoData, comment: "")
-        }
-    }
-}
-
+/// Service for fetching and maintainance of ``Recipe`` data
+///
+/// Typical usage of the service:
+/// ```swift
+/// let service = RecipeService.shared
+/// do {
+///     let recipes = try await service.fetchRecipes()
+/// } catch {
+///     print("There was an error loading recipes: \(error.localizedDescription)")
+/// }
+/// ```
+///
+/// For preview or test purposes one can fed the service with ready data:
+/// ```swift
+/// let mockData = try! Data(contentsOf: Bundle.main.url(forResource: "response.json", withExtension: nil)!)
+/// let service = RecipeService(data: mockData)
+/// do {
+///     // get `mockData` parsed and processed into `[Recipe]`
+///     let recipes = try await service.fetchRecipes()
+/// } catch {
+///     print("There was an error loading recipes: \(error.localizedDescription)")
+/// }
+/// ```
 class RecipeService {
+    /// Static data - for preview/test purposes
+    private var data: Data? = nil
+    
+    /// Current data load task
+    private var task: Task<[Recipe], Error>? = nil
+    
+    /// Recently loaded recipes list
+    private var recipes: [Recipe]? = nil
+    
+    /// Error if recent list loading failed
+    private var error: Error? = nil
+    
+    /// Shared instance of the service
+    ///
+    /// Will hold to the data to decrease unwanted network calls while views and view-models are reloaded
+    static let shared = RecipeService()
+    
+    /// Initializer for preview/test purposes
+    ///
+    /// - Parameters:
+    ///    - data: JSON string as a ``Data`` instance
+    init(data: Data? = nil) {
+        self.data = data
+    }
+    
+    /// Fetches the data from data URL or returns static data if instance was initialized with it
+    ///
+    ///  - Parameters:
+    ///     - completion: closure receiving results or error of data load
     private func fetchData(completion: @escaping(Data?, URLResponse?, Error?) -> Void) {
-#if DEBUG
-        if Config.isPreview {
-            completion(Config.responseData, nil, nil)
+        if let data = self.data {
+            completion(data, nil, nil)
             return;
         }
-#endif
         URLSession.shared.dataTask(with: Settings.dataURL, completionHandler: completion).resume()
     }
     
-    func fetchRecipes(completion: @escaping (Result<[Recipe], Error>) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            self.fetchData() { data, response, error in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        completion(.failure(RecipeServiceError.requestError(error)))
+    /// Fetch and process the data
+    ///
+    /// It gets the data from `fetchData` and decodes it to ``Recipe`` list
+    ///
+    /// - Returns: list of ``Recipe`` models
+    ///
+    /// - Throws: `RecipeServiceError` whether there is a problem loading recipes
+    private func fetchRecipesData() async throws -> [Recipe] {
+        return try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global(qos: .background).async {
+                self.fetchData() { data, response, error in
+                    if let error = error {
+                        DispatchQueue.main.async {
+                            continuation.resume(throwing: RecipeServiceError.requestError(error))
+                        }
+                        return
                     }
-                    return
-                }
-                guard let data = data else {
-                    DispatchQueue.main.async {
-                        completion(.failure(RecipeServiceError.noData))
+                    guard let data = data else {
+                        DispatchQueue.main.async {
+                            continuation.resume(throwing: RecipeServiceError.noData)
+                        }
+                        return
                     }
-                    return
-                }
-
-                do {
-                    let decoder = JSONDecoder()
-                    let container = try decoder.decode(ResponseData.self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(container.recipes))
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        print("\(error)")
-                        completion(.failure(RecipeServiceError.decodingError(error)))
+                    
+                    do {
+                        let decoder = JSONDecoder()
+                        let container = try decoder.decode(ResponseData.self, from: data)
+                        DispatchQueue.main.async {
+                            if container.recipes.count > 0 {
+                                continuation.resume(returning: container.recipes)
+                            } else {
+                                continuation.resume(throwing: RecipeServiceError.noRecipes)
+                            }
+                        }
+                    } catch {
+                        DispatchQueue.main.async {
+                            print("\(error)")
+                            continuation.resume(throwing: RecipeServiceError.decodingError(error))
+                        }
                     }
                 }
             }
         }
     }
+    
+    /// Fetches recipes data
+    ///
+    /// This method makes sure the data is not double loaded
+    /// It is also not making new requests if data was already loaded, unless `force` parameter is true
+    ///
+    /// - Parameters:
+    ///     - force: forces the method to reload the data (unless the request is already running and not finished)\
+    ///
+    /// - Returns: list of `Recipe` items
+    ///
+    /// - Throws: `RecipeServiceError` whether there is a problem with loading recipe data
+    func fetchRecipes(_ force: Bool = false) async throws -> [Recipe] {
+        if let t = task {
+            return try await t.value;
+        }
+        if force {
+            recipes = nil
+            error = nil
+        }
+        if let r = recipes {
+            return r
+        }
+        if let e = error {
+            throw e
+        }
+        let newTask = Task {
+            defer {
+                task = nil
+            }
+            do {
+                let recipes = try await fetchRecipesData()
+                self.recipes = recipes
+                return recipes
+            } catch {
+                self.error = error
+                throw error
+            }
+        }
+        task = newTask
+        return try await newTask.value
+    }
+    
 }

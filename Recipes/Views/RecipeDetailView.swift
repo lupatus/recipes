@@ -7,10 +7,10 @@
 import SwiftUI
 
 struct RecipeDetailView: View {
-    let recipe: Recipe
+    let url: URL
     
     var body: some View {
-        ScrollView {
+        /*ScrollView {
             VStack(alignment: .leading) {
                 Text(recipe.name)
                     .font(.largeTitle)
@@ -18,6 +18,14 @@ struct RecipeDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("Recipe Details")
+        .navigationTitle("Recipe Details")*/
+        
+        SafariWebView(url: url)
+            .ignoresSafeArea()
     }
+}
+
+
+#Preview {
+    RecipeDetailView(url: URL(string: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ")!)
 }

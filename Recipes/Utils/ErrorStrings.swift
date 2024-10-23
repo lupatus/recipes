@@ -7,6 +7,9 @@
 import Foundation
 
 enum ErrorStrings {
+    /// Generic error string for errors while loading the recipe data
     static let ErrorLoadingRecipes = "Error loading recipes"
-    static let NoData = "No recipes to show at this moment, try again later"
+    
+    /// Error for no recipes found at the backend
+    static let ErrorEmptyResult = "No recipes to show at this moment, please try again later"
 }

@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4D9798972CC84E2600D29F26 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 4D9798962CC84E2600D29F26 /* CachedAsyncImage */; };
+		4D9798B92CC8ADBD00D29F26 /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4D9798B82CC8ADBD00D29F26 /* YouTubePlayerKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4D40179E2CC1CF8400253B1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,6 +34,34 @@
 		4D4017A72CC1CF8400253B1D /* RecipesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4D9798A82CC8696D00D29F26 /* Exceptions for "Recipes" folder in "Recipes" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4D40178C2CC1CF8300253B1D /* Recipes */;
+		};
+		4D9798AD2CC8A2D300D29F26 /* Exceptions for "Recipes" folder in "RecipesTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/recipes-empty.json",
+				"Preview Content/recipes-malformed.json",
+				"Preview Content/recipes.json",
+			);
+			target = 4D40179C2CC1CF8400253B1D /* RecipesTests */;
+		};
+		4D9798AE2CC8A2D300D29F26 /* Exceptions for "Recipes" folder in "RecipesUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/recipes-empty.json",
+				"Preview Content/recipes-malformed.json",
+				"Preview Content/recipes.json",
+			);
+			target = 4D4017A62CC1CF8400253B1D /* RecipesUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4D4017A02CC1CF8400253B1D /* RecipesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -42,6 +75,11 @@
 		};
 		4D4017CA2CC1EF1900253B1D /* Recipes */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4D9798A82CC8696D00D29F26 /* Exceptions for "Recipes" folder in "Recipes" target */,
+				4D9798AD2CC8A2D300D29F26 /* Exceptions for "Recipes" folder in "RecipesTests" target */,
+				4D9798AE2CC8A2D300D29F26 /* Exceptions for "Recipes" folder in "RecipesUITests" target */,
+			);
 			path = Recipes;
 			sourceTree = "<group>";
 		};
@@ -52,6 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D9798B92CC8ADBD00D29F26 /* YouTubePlayerKit in Frameworks */,
+				4D9798972CC84E2600D29F26 /* CachedAsyncImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +152,8 @@
 			);
 			name = Recipes;
 			packageProductDependencies = (
+				4D9798962CC84E2600D29F26 /* CachedAsyncImage */,
+				4D9798B82CC8ADBD00D29F26 /* YouTubePlayerKit */,
 			);
 			productName = Recipes;
 			productReference = 4D40178D2CC1CF8300253B1D /* Recipes.app */;
@@ -195,6 +237,10 @@
 			);
 			mainGroup = 4D4017842CC1CF8300253B1D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4D9798952CC84E2600D29F26 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				4D9798B72CC8ADBD00D29F26 /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4D40178E2CC1CF8300253B1D /* Products */;
 			projectDirPath = "";
@@ -405,6 +451,7 @@
 				DEVELOPMENT_TEAM = 9PSX95N447;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Recipes/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Recipes;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -438,6 +485,7 @@
 				DEVELOPMENT_TEAM = 9PSX95N447;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Recipes/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Recipes;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -571,6 +619,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4D9798952CC84E2600D29F26 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
+		4D9798B72CC8ADBD00D29F26 /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SvenTiigi/YouTubePlayerKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D9798962CC84E2600D29F26 /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D9798952CC84E2600D29F26 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
+		4D9798B82CC8ADBD00D29F26 /* YouTubePlayerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D9798B72CC8ADBD00D29F26 /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */;
+			productName = YouTubePlayerKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4D4017852CC1CF8300253B1D /* Project object */;
 }

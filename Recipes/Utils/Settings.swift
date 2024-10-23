@@ -7,7 +7,8 @@
 import Foundation
 
 enum Settings {
+    /// The URL where the data lays
     static var dataURL: URL {
-        return try! URL(string: Config.value(for: "DATA_URL"))!
+        return try! URL(string: Config.value(for: "DataURL"))!
     }
 }
