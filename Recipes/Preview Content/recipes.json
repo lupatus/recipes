@@ -560,6 +560,11 @@
             "source_url": "https://www.bbcgoodfood.com/recipes/2540/white-chocolate-crme-brle",
             "uuid": "ef7d81b7-07ba-4fab-a791-ae10e2817e66",
             "youtube_url": "https://www.youtube.com/watch?v=LmJ0lsPLHDc"
+        },
+        {
+            "cuisine": "None",
+            "name": "Test recipe, min payload",
+            "uuid": "4348500B-28D8-4E5F-BB5E-234F385B2270"
         }
     ]
 }

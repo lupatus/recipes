@@ -10,19 +10,27 @@ import CachedAsyncImage
 
 struct RecipeRowView: View {
     let recipe: Recipe
-    let showDetails: (_ sourceURL: URL?, _ youtubeURL: URL?) -> Void
+    let showDetails: (_ recipeDetail: RecipeDetail) -> Void
     
     var body: some View {
         HStack(alignment: .center) {
-            CachedAsyncImage(url: recipe.photoUrlSmall) { image in
-                image
+            if let smallUrl = recipe.photoUrlSmall {
+                CachedAsyncImage(url: smallUrl) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 50, height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                } placeholder: {
+                    ProgressView()
+                        .frame(width: 50, height: 50)
+                }
+            } else {
+                Image(systemName: "photo")
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-            } placeholder: {
-                ProgressView()
-                    .frame(width: 50, height: 50)
             }
             
             VStack(alignment: .leading) {
@@ -37,7 +45,7 @@ struct RecipeRowView: View {
             
             if let youtubeUrl = recipe.youtubeUrl {
                 Button(action: {
-                    showDetails(nil, youtubeUrl)
+                    showDetails(.youtubeUrl(youtubeUrl))
                 }) {
                     Image(systemName: "play.circle.fill")
                         .font(.title)
@@ -49,7 +57,7 @@ struct RecipeRowView: View {
             
             if let sourceUrl = recipe.sourceUrl {
                 Button(action: {
-                    showDetails(sourceUrl, nil)
+                    showDetails(.sourceUrl(sourceUrl))
                 }) {
                     Image(systemName: "safari.fill")
                         .font(.title)
@@ -74,16 +82,32 @@ struct RecipeRowView: View {
     }
 }
 
-#Preview {
+#Preview("Full") {
     RecipeRowView(recipe: Recipe(
         uuid: UUID(),
         cuisine: "Malaysian",
         name: "Apam Balik",
         photoUrlLarge: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/large.jpg")!,
         photoUrlSmall: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/small.jpg")!,
+        //photoUrlSmall: nil,
         sourceUrl: URL(string: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ")!,
         youtubeUrl: URL(string: "https://www.youtube.com/watch?v=6R8ffRRJcrg")!
-    )) { _, _ in
+    )) { _ in
+        
+    }
+}
+
+#Preview("Missing photo") {
+    RecipeRowView(recipe: Recipe(
+        uuid: UUID(),
+        cuisine: "Malaysian",
+        name: "Apam Balik",
+        photoUrlLarge: nil,
+        photoUrlSmall: nil,
+        //photoUrlSmall: nil,
+        sourceUrl: URL(string: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ")!,
+        youtubeUrl: URL(string: "https://www.youtube.com/watch?v=6R8ffRRJcrg")!
+    )) { _ in
         
     }
 }

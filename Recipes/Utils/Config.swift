@@ -16,7 +16,7 @@ enum Config {
     /// Get a value from main bundle
     ///
     /// - Parameters:
-    ///     - for: name of the parameter
+    ///    - key: name of the parameter
     ///
     /// - Returns: requested value from main bundle with proper type
     /// 

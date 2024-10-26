@@ -19,7 +19,7 @@ import Foundation
 /// }
 /// ```
 ///
-/// For preview or test purposes one can fed the service with ready data:
+/// For preview purposes one can fed the service with ready data:
 /// ```swift
 /// let mockData = try! Data(contentsOf: Bundle.main.url(forResource: "response.json", withExtension: nil)!)
 /// let service = RecipeService(data: mockData)
@@ -30,9 +30,17 @@ import Foundation
 ///     print("There was an error loading recipes: \(error.localizedDescription)")
 /// }
 /// ```
+///
+/// For testing URLSession can be replaced with mock session
+/// ```swift
+/// let service = RecipeService(session: mockSession)
+/// ```
 class RecipeService {
     /// Static data - for preview/test purposes
     private var data: Data? = nil
+    
+    /// URLSession - useful for testing
+    private var session: URLSession? = nil
     
     /// Current data load task
     private var task: Task<[Recipe], Error>? = nil
@@ -48,12 +56,29 @@ class RecipeService {
     /// Will hold to the data to decrease unwanted network calls while views and view-models are reloaded
     static let shared = RecipeService()
     
+    convenience init() {
+        self.init(data: nil, session: nil)
+    }
+    
     /// Initializer for preview/test purposes
     ///
     /// - Parameters:
     ///    - data: JSON string as a ``Data`` instance
-    init(data: Data? = nil) {
+    convenience init(data: Data) {
+        self.init(data: data, session: nil)
+    }
+    
+    /// Initializer for testing purposes
+    ///
+    /// - Parameters:
+    ///    - session: URLSession replacement
+    convenience init(session: URLSession) {
+        self.init(data: nil, session: session)
+    }
+    
+    private init(data: Data? = nil, session: URLSession? = nil) {
         self.data = data
+        self.session = session
     }
     
     /// Fetches the data from data URL or returns static data if instance was initialized with it
@@ -65,7 +90,8 @@ class RecipeService {
             completion(data, nil, nil)
             return;
         }
-        URLSession.shared.dataTask(with: Settings.dataURL, completionHandler: completion).resume()
+        let session = self.session ?? URLSession.shared
+        session.dataTask(with: Settings.dataURL, completionHandler: completion).resume()
     }
     
     /// Fetch and process the data

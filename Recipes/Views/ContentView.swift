@@ -11,8 +11,7 @@ import YouTubePlayerKit
 struct ContentView: View {
     @StateObject private var viewModel: RecipeViewModel
     @State private var isPresentedNavigation: Bool = false
-    @State private var youtubeUrl: URL? = nil
-    @State private var sourceUrl: URL? = nil
+    @State private var recipeDetail: RecipeDetail? = nil
     
     init() {
         self.init(viewModel: RecipeViewModel())
@@ -24,12 +23,9 @@ struct ContentView: View {
     }
     
     var body: some View {
-        let showRecipeDetails = { sUrl, yUrl in
-            sourceUrl = sUrl
-            youtubeUrl = yUrl
-            if sourceUrl != nil || youtubeUrl != nil {
-                isPresentedNavigation = true
-            }
+        let showRecipeDetails = { recipeDetail in
+            self.recipeDetail = recipeDetail
+            isPresentedNavigation = true
         }
         
         NavigationStack {
@@ -41,13 +37,15 @@ struct ContentView: View {
                         .task { await viewModel.loadRecipes() }
                         .refreshable { await viewModel.reloadRecipes() }
                         .navigationDestination(isPresented: $isPresentedNavigation) {
-                            if let yUrl = youtubeUrl {
-                                VideoView(url: yUrl)
-                                    .navigationBarBackButtonHidden(true)
-                            }
-                            if let sUrl = sourceUrl {
-                                RecipeDetailView(url: sUrl)
-                                    .navigationBarBackButtonHidden(true)
+                            if let detail = recipeDetail {
+                                switch detail {
+                                case .sourceUrl(let url):
+                                    RecipeDetailView(url: url)
+                                        .navigationBarBackButtonHidden(true)
+                                case .youtubeUrl(let url):
+                                    VideoView(url: url)
+                                        .navigationBarBackButtonHidden(true)
+                                }
                             }
                         }
                     if viewModel.isLoading {
